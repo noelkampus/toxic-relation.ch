@@ -9,7 +9,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 const width = window.innerWidth;
 const height = window.innerHeight;
 
-// // Dummy Data
+// Dummy Data
 const nodes = [
     { id: "UBS" },
     { id: "SNB" },
