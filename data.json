@@ -1,0 +1,112 @@
+[
+    {
+        "#": "15",
+        "name": "UBS",
+        "type": "investor",
+        "country of hq": "Switzerland",
+        "region": "Europe (non EU)",
+        "shares": "43,402",
+        "bonds": "5,037",
+        "total": "48,439",
+        "investments": [
+            {"rank": 1, "name": "Exxon Mobil Corporation", "subsidiaries": "Yes", "country": "United States", "shares": "3222", "bonds": "143", "total": "3364", "oil": 1682, "gas": 1009, "coal": 673},
+            {"rank": 2, "name": "Chevron Corporation", "subsidiaries": "Yes", "country": "United States", "shares": "3011", "bonds": "32", "total": "3043", "oil": 1522, "gas": 913, "coal": 608},
+            {"rank": 3, "name": "Partners Group Holding AG", "subsidiaries": "No", "country": "Switzerland", "shares": "2115", "bonds": "77", "total": "2192", "oil": 1096, "gas": 657, "coal": 439},
+            {"rank": 4, "name": "Shell plc", "subsidiaries": "Yes", "country": "United Kingdom", "shares": "1764", "bonds": "198", "total": "1962", "oil": 981, "gas": 589, "coal": 392},
+            {"rank": 5, "name": "TotalEnergies SE", "subsidiaries": "Yes", "country": "France", "shares": "1662", "bonds": "286", "total": "1949", "oil": 974, "gas": 585, "coal": 390},
+            {"rank": 6, "name": "NextEra Energy Inc", "subsidiaries": "Yes", "country": "United States", "shares": "1601", "bonds": "150", "total": "1751", "oil": 876, "gas": 525, "coal": 350},
+            {"rank": 7, "name": "General Electric Company", "subsidiaries": "Yes", "country": "United States", "shares": "1154", "bonds": "7", "total": "1161", "oil": 581, "gas": 348, "coal": 232},
+            {"rank": 8, "name": "ConocoPhillips", "subsidiaries": "Yes", "country": "United States", "shares": "1107", "bonds": "32", "total": "1138", "oil": 569, "gas": 341, "coal": 228},
+            {"rank": 9, "name": "Blackstone Inc", "subsidiaries": "Yes", "country": "United States", "shares": "1127", "bonds": "6", "total": "1133", "oil": 566, "gas": 340, "coal": 227},
+            {"rank": 10, "name": "Schlumberger Ltd (SLB)", "subsidiaries": "Yes", "country": "United States", "shares": "1048", "bonds": "6", "total": "1054", "oil": 527, "gas": 316, "coal": 211}
+        ]
+    },
+    {
+        "#": "78",
+        "name": "Schweizerische Nationalbank",
+        "type": "investor",
+        "country of hq": "Switzerland",
+        "region": "Europe (non EU)",
+        "shares": "10,002",
+        "bonds": "",
+        "total": "10,002",
+        "investments": [
+            {"rank": 1, "name": "Exxon Mobil Corporation", "subsidiaries": "Yes", "country": "United States", "shares": "1614", "bonds": "1614", "total": "1614", "oil": 807, "gas": 485, "coal": 322},
+            {"rank": 2, "name": "Chevron Corporation", "subsidiaries": "Yes", "country": "United States", "shares": "971", "bonds": "971", "total": "971", "oil": 486, "gas": 291, "coal": 194},
+            {"rank": 3, "name": "General Electric Company", "subsidiaries": "Yes", "country": "United States", "shares": "572", "bonds": "572", "total": "572", "oil": 286, "gas": 172, "coal": 114},
+            {"rank": 4, "name": "ConocoPhillips", "subsidiaries": "Yes", "country": "United States", "shares": "453", "bonds": "453", "total": "453", "oil": 227, "gas": 136, "coal": 91},
+            {"rank": 5, "name": "NextEra Energy Inc", "subsidiaries": "Yes", "country": "United States", "shares": "398", "bonds": "398", "total": "398", "oil": 199, "gas": 119, "coal": 80},
+            {"rank": 6, "name": "BP plc", "subsidiaries": "Yes", "country": "United Kingdom", "shares": "383", "bonds": "383", "total": "383", "oil": 192, "gas": 115, "coal": 76},
+            {"rank": 7, "name": "Canadian Natural Resources Ltd (CNRL)", "subsidiaries": "No", "country": "Canada", "shares": "247", "bonds": "247", "total": "247", "oil": 124, "gas": 74, "coal": 49},
+            {"rank": 8, "name": "Schlumberger Ltd (SLB)", "subsidiaries": "Yes", "country": "United States", "shares": "234", "bonds": "234", "total": "234", "oil": 117, "gas": 70, "coal": 47},
+            {"rank": 9, "name": "The Southern Company", "subsidiaries": "Yes", "country": "United States", "shares": "234", "bonds": "234", "total": "234", "oil": 117, "gas": 70, "coal": 47},
+            {"rank": 10, "name": "Enbridge Inc", "subsidiaries": "No", "country": "Canada", "shares": "232", "bonds": "232", "total": "232", "oil": 116, "gas": 70, "coal": 46}
+        ]
+    },
+    {
+        "#": "79",
+        "name": "Pictet",
+        "type": "investor",
+        "country of hq": "Switzerland",
+        "region": "Europe (non EU)",
+        "shares": "9,031",
+        "bonds": "660",
+        "total": "9,691",
+        "investments": [
+            {"rank": 1, "name": "NextEra Energy Inc", "subsidiaries": "Yes", "country": "United States", "shares": "867", "bonds": "3", "total": "870", "oil": 435, "gas": 261, "coal": 174},
+            {"rank": 2, "name": "Siemens AG", "subsidiaries": "Yes", "country": "Germany", "shares": "618", "bonds": "0", "total": "618", "oil": 309, "gas": 185, "coal": 124},
+            {"rank": 3, "name": "RWE AG", "subsidiaries": "Yes", "country": "Germany", "shares": "451", "bonds": "0", "total": "451", "oil": 226, "gas": 135, "coal": 90},
+            {"rank": 4, "name": "Sempra Energy", "subsidiaries": "Yes", "country": "United States", "shares": "396", "bonds": "8", "total": "404", "oil": 202, "gas": 121, "coal": 81},
+            {"rank": 5, "name": "The Southern Company", "subsidiaries": "Yes", "country": "United States", "shares": "376", "bonds": "10", "total": "385", "oil": 193, "gas": 116, "coal": 77},
+            {"rank": 6, "name": "Enel SpA", "subsidiaries": "Yes", "country": "Italy", "shares": "280", "bonds": "55", "total": "335", "oil": 168, "gas": 101, "coal": 67},
+            {"rank": 7, "name": "DTE Energy Co", "subsidiaries": "Yes", "country": "United States", "shares": "328", "bonds": "0", "total": "328", "oil": 164, "gas": 98, "coal": 66},
+            {"rank": 8, "name": "National Grid plc", "subsidiaries": "Yes", "country": "United Kingdom", "shares": "323", "bonds": "0", "total": "323", "oil": 161, "gas": 97, "coal": 65},
+            {"rank": 9, "name": "SSE plc", "subsidiaries": "Yes", "country": "United Kingdom", "shares": "287", "bonds": "10", "total": "297", "oil": 149, "gas": 89, "coal": 59},
+            {"rank": 10, "name": "WEC Energy Group Inc", "subsidiaries": "Yes", "country": "United States", "shares": "294", "bonds": "0", "total": "294", "oil": 147, "gas": 88, "coal": 59}
+        ]
+    },
+    {
+        "#": "153",
+        "name": "Zürcher Kantonalbank",
+        "type": "investor",
+        "country of hq": "Switzerland",
+        "region": "Europe (non EU)",
+        "shares": "3,462",
+        "bonds": "650",
+        "total": "4,112",
+        "investments": [
+            {"rank": 1, "name": "Shell plc", "subsidiaries": "Yes", "country": "United Kingdom", "shares": "439", "bonds": "36", "total": "475", "oil": 238, "gas": 143, "coal": 95},
+            {"rank": 2, "name": "Exxon Mobil Corporation", "subsidiaries": "Yes", "country": "United States", "shares": "234", "bonds": "10", "total": "244", "oil": 122, "gas": 73, "coal": 49},
+            {"rank": 3, "name": "Siemens AG", "subsidiaries": "Yes", "country": "Germany", "shares": "209", "bonds": "0", "total": "209", "oil": 105, "gas": 63, "coal": 41},
+            {"rank": 4, "name": "TotalEnergies SE", "subsidiaries": "Yes", "country": "France", "shares": "87", "bonds": "80", "total": "167", "oil": 84, "gas": 50, "coal": 33},
+            {"rank": 5, "name": "Chevron Corporation", "subsidiaries": "Yes", "country": "United States", "shares": "123", "bonds": "5", "total": "128", "oil": 64, "gas": 38, "coal": 26},
+            {"rank": 6, "name": "BP plc", "subsidiaries": "Yes", "country": "United Kingdom", "shares": "86", "bonds": "32", "total": "118", "oil": 59, "gas": 35, "coal": 24},
+            {"rank": 7, "name": "E.ON SE", "subsidiaries": "Yes", "country": "Germany", "shares": "75", "bonds": "14", "total": "89", "oil": 45, "gas": 27, "coal": 18},
+            {"rank": 8, "name": "General Electric Company", "subsidiaries": "Yes", "country": "United States", "shares": "68", "bonds": "0", "total": "68", "oil": 34, "gas": 20, "coal": 14},
+            {"rank": 9, "name": "Enel SpA", "subsidiaries": "Yes", "country": "Italy", "shares": "36", "bonds": "32", "total": "68", "oil": 34, "gas": 20, "coal": 14},
+            {"rank": 10, "name": "Transnet SOC Ltd", "subsidiaries": "Yes", "country": "South Africa", "shares": "76", "bonds": "0", "total": "76", "oil": 38, "gas": 23, "coal": 15}
+        ]
+    },
+    {
+        "#": "226",
+        "name": "Vontobel",
+        "type": "investor",
+        "country of hq": "Switzerland",
+        "region": "Europe (non EU)",
+        "shares": "1,266",
+        "bonds": "1,096",
+        "total": "2,362",
+        "investments": [
+            {"rank": 1, "name": "Shell plc", "subsidiaries": "Yes", "country": "United Kingdom", "shares": "371", "bonds": "0", "total": "371", "oil": 185, "gas": 111, "coal": 74},
+            {"rank": 2, "name": "Petroleos Mexicanos (PEMEX)", "subsidiaries": "Yes", "country": "Mexico", "shares": "168", "bonds": "0", "total": "168", "oil": 84, "gas": 50, "coal": 34},
+            {"rank": 3, "name": "Partners Group Holding AG", "subsidiaries": "No", "country": "Switzerland", "shares": "157", "bonds": "2", "total": "158", "oil": 79, "gas": 47, "coal": 32},
+            {"rank": 4, "name": "BP plc", "subsidiaries": "Yes", "country": "United Kingdom", "shares": "43", "bonds": "80", "total": "123", "oil": 62, "gas": 37, "coal": 24},
+            {"rank": 5, "name": "JSC NC KazMunayGas (KMG)", "subsidiaries": "Yes", "country": "Kazakhstan", "shares": "111", "bonds": "0", "total": "111", "oil": 56, "gas": 33, "coal": 22},
+            {"rank": 6, "name": "Petro Rio SA (PRIO)", "subsidiaries": "Yes", "country": "Brazil", "shares": "94", "bonds": "0", "total": "94", "oil": 47, "gas": 28, "coal": 19},
+            {"rank": 7, "name": "Enel SpA", "subsidiaries": "Yes", "country": "Italy", "shares": "79", "bonds": "6", "total": "85", "oil": 42, "gas": 25, "coal": 17},
+            {"rank": 8, "name": "Siemens AG", "subsidiaries": "Yes", "country": "Germany", "shares": "77", "bonds": "0", "total": "77", "oil": 39, "gas": 23, "coal": 15},
+            {"rank": 9, "name": "Transnet SOC Ltd", "subsidiaries": "Yes", "country": "South Africa", "shares": "76", "bonds": "0", "total": "76", "oil": 38, "gas": 23, "coal": 15},
+            {"rank": 10, "name": "NextEra Energy Inc", "subsidiaries": "Yes", "country": "United States", "shares": "62", "bonds": "6", "total": "68", "oil": 34, "gas": 20, "coal": 14}
+        ]
+    }
+]    
