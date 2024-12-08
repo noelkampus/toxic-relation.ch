@@ -194,11 +194,12 @@ console.log('data: ', data)
 console.log('nodes: ', data.nodes)
 console.log('links: ', data.links)
 
-const width = 1200, height = 700;
+const width = 800;
+const height = 500;
 
 const sankey = d3.sankey()
     .nodeId(d => d.id)
-    .nodeWidth(0)
+    .nodeWidth(10)
     .nodePadding(2)
     .extent([[1, 1], [width, height]]);
 
@@ -211,15 +212,25 @@ const svg = d3.select("#container").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-svg.append("g")
+    svg.append("g")
     .selectAll("path")
     .data(links)
     .join("path")
     .attr("d", d3.sankeyLinkHorizontal())
-    .attr("stroke", "#0C667E")
+    .attr("stroke", d => d.source.id === "UBS" ? "#FF5733" : "#0C667E") // UBS links in orange
     .attr("stroke-width", d => Math.max(1, d.width))
     .attr("stroke-opacity", 0.75)
     .attr("fill", "none")
+    .on("mouseover", function (event, d) {
+        d3.select(this)
+            .attr("stroke-opacity", 1) // Emphasize link on hover
+            .attr("stroke", "#FFD700"); // Change link color to gold
+    })
+    .on("mouseout", function (event, d) {
+        d3.select(this)
+            .attr("stroke-opacity", 0.75) // Reset opacity
+            .attr("stroke", d.source.id === "UBS" ? "#FF5733" : "#0C667E"); // Reset color
+    })
     .append("title")
     .text(d => `${d.source.id} → ${d.target.id}\n${d.value}`);
 
@@ -233,9 +244,51 @@ node.append("rect")
     .attr("y", d => d.y0)
     .attr("height", d => d.y1 - d.y0)
     .attr("width", d => d.x1 - d.x0)
-    .attr("fill", "#2D2D2D")
+    .attr("fill", d => d.id === "UBS" ? "#FF5733" : "#2D2D2D") // UBS node in orange
+    .on("mouseover", function (event, d) {
+        d3.select(this)
+            .attr("fill", "#FFD700"); // Highlight node on hover
+        svg.selectAll("path")
+            .filter(link => link.source.id === d.id || link.target.id === d.id)
+            .attr("stroke", "#FFD700") // Highlight related links
+            .attr("stroke-opacity", 1);
+    })
+    .on("mouseout", function (event, d) {
+        d3.select(this)
+            .attr("fill", d.id === "UBS" ? "#FF5733" : "#2D2D2D"); // Reset node color
+        svg.selectAll("path")
+            .filter(link => link.source.id === d.id || link.target.id === d.id)
+            .attr("stroke", link => link.source.id === "UBS" ? "#FF5733" : "#0C667E") // Reset related links
+            .attr("stroke-opacity", 0.75);
+    })
     .append("title")
     .text(d => `${d.id}`);
+
+// svg.append("g")
+//     .selectAll("path")
+//     .data(links)
+//     .join("path")
+//     .attr("d", d3.sankeyLinkHorizontal())
+//     .attr("stroke", "#000")
+//     .attr("stroke-width", d => Math.max(1, d.width))
+//     .attr("stroke-opacity", 0.9)
+//     .attr("fill", "none")
+//     .append("title")
+//     .text(d => `${d.source.id} → ${d.target.id}\n${d.value}`);
+
+// const node = svg.append("g")
+//     .selectAll("g")
+//     .data(nodes)
+//     .join("g");
+
+// node.append("rect")
+//     .attr("x", d => d.x0)
+//     .attr("y", d => d.y0)
+//     .attr("height", d => d.y1 - d.y0)
+//     .attr("width", d => d.x1 - d.x0)
+//     .attr("fill", "#2D2D2D")
+//     .append("title")
+//     .text(d => `${d.id}`);
 
 // node.append("text")
 //     .attr("x", d => d.x0 - 6)
