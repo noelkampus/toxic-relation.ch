@@ -197,6 +197,10 @@ console.log('links: ', data.links)
 const width = 800;
 const height = 500;
 
+const colorChartMain = '#000000';
+const colorOpacity = 0.75;
+const colorChartHighlight = '#FFD700';
+
 const sankey = d3.sankey()
     .nodeId(d => d.id)
     .nodeWidth(10)
@@ -217,19 +221,20 @@ const svg = d3.select("#container").append("svg")
     .data(links)
     .join("path")
     .attr("d", d3.sankeyLinkHorizontal())
-    .attr("stroke", d => d.source.id === "UBS" ? "#FF5733" : "#0C667E") // UBS links in orange
+    // .attr("stroke", d => d.source.id === "UBS" ? "#FF5733" : "#0C667E") // UBS links in orange
+    .attr("stroke", colorChartMain)
     .attr("stroke-width", d => Math.max(1, d.width))
-    .attr("stroke-opacity", 0.75)
+    .attr("stroke-opacity", colorOpacity)
     .attr("fill", "none")
     .on("mouseover", function (event, d) {
         d3.select(this)
-            .attr("stroke-opacity", 1) // Emphasize link on hover
-            .attr("stroke", "#FFD700"); // Change link color to gold
+            .attr("stroke-opacity", colorOpacity) // Emphasize link on hover
+            .attr("stroke", colorChartHighlight); // Change link color to gold
     })
     .on("mouseout", function (event, d) {
         d3.select(this)
-            .attr("stroke-opacity", 0.75) // Reset opacity
-            .attr("stroke", d.source.id === "UBS" ? "#FF5733" : "#0C667E"); // Reset color
+            .attr("stroke-opacity", colorOpacity) // Reset opacity
+            .attr("stroke", colorChartMain); // Reset color
     })
     .append("title")
     .text(d => `${d.source.id} → ${d.target.id}\n${d.value}`);
@@ -244,51 +249,70 @@ node.append("rect")
     .attr("y", d => d.y0)
     .attr("height", d => d.y1 - d.y0)
     .attr("width", d => d.x1 - d.x0)
-    .attr("fill", d => d.id === "UBS" ? "#FF5733" : "#2D2D2D") // UBS node in orange
+    .attr("fill", colorChartMain)
     .on("mouseover", function (event, d) {
-        d3.select(this)
-            .attr("fill", "#FFD700"); // Highlight node on hover
+        // Highlight the investor node
+        d3.select(this).attr("fill", colorChartHighlight);
+
+        // Highlight all links from the investor to companies
+        const investorLinks = links.filter(link => link.source.id === d.id);
         svg.selectAll("path")
-            .filter(link => link.source.id === d.id || link.target.id === d.id)
-            .attr("stroke", "#FFD700") // Highlight related links
+            .filter(link => link.source.id === d.id)
+            .attr("stroke", colorChartHighlight)
             .attr("stroke-opacity", 1);
+
+        // Highlight all company-to-sector links based on investor's contribution
+        investorLinks.forEach(investorLink => {
+            const companyId = investorLink.target.id;
+            const investmentValue = investorLink.value;
+
+            // Process all links from the company to sectors
+            const companySectorLinks = links.filter(link => link.source.id === companyId);
+            companySectorLinks.forEach(sectorLink => {
+                const totalCompanyValue = links
+                    .filter(link => link.source.id === companyId)
+                    .reduce((sum, link) => sum + link.value, 0);
+
+                // Calculate the investor's contribution for each sector link
+                const investorContribution = (sectorLink.value / totalCompanyValue) * investmentValue;
+
+                if (investorContribution > 0) {
+                    // Overlay the adjusted link for the investor's contribution
+                    svg.append("path")
+                        .attr("class", "highlight") // Class for dynamic removal
+                        .attr("d", d3.sankeyLinkHorizontal()(sectorLink))
+                        .attr("stroke", colorChartHighlight) // Highlight adjusted links
+                        .attr("stroke-width", Math.max(1, investorContribution / 100)) // Scale dynamically
+                        .attr("stroke-opacity", 0.9)
+                        .attr("fill", "none")
+                        .append("title")
+                        .text(
+                            `${sectorLink.source.id} → ${sectorLink.target.id}\n` +
+                            `Investor Contribution: ${investorContribution.toFixed(2)} billion`
+                        );
+                }
+            });
+        });
     })
     .on("mouseout", function (event, d) {
-        d3.select(this)
-            .attr("fill", d.id === "UBS" ? "#FF5733" : "#2D2D2D"); // Reset node color
+        // Reset the investor node color
+        d3.select(this).attr("fill", colorChartMain);
+
+        // Reset all original link styles
         svg.selectAll("path")
-            .filter(link => link.source.id === d.id || link.target.id === d.id)
-            .attr("stroke", link => link.source.id === "UBS" ? "#FF5733" : "#0C667E") // Reset related links
-            .attr("stroke-opacity", 0.75);
+            .filter(function () {
+                return !d3.select(this).classed("highlight");
+            }) // Ignore dynamically added highlights
+            .attr("stroke", colorChartMain)
+            .attr("stroke-opacity", 0.75)
+            .attr("stroke-width", d => Math.max(1, d.width));
+
+        // Remove dynamically created highlights
+        svg.selectAll("path.highlight").remove();
     })
     .append("title")
     .text(d => `${d.id}`);
 
-// svg.append("g")
-//     .selectAll("path")
-//     .data(links)
-//     .join("path")
-//     .attr("d", d3.sankeyLinkHorizontal())
-//     .attr("stroke", "#000")
-//     .attr("stroke-width", d => Math.max(1, d.width))
-//     .attr("stroke-opacity", 0.9)
-//     .attr("fill", "none")
-//     .append("title")
-//     .text(d => `${d.source.id} → ${d.target.id}\n${d.value}`);
-
-// const node = svg.append("g")
-//     .selectAll("g")
-//     .data(nodes)
-//     .join("g");
-
-// node.append("rect")
-//     .attr("x", d => d.x0)
-//     .attr("y", d => d.y0)
-//     .attr("height", d => d.y1 - d.y0)
-//     .attr("width", d => d.x1 - d.x0)
-//     .attr("fill", "#2D2D2D")
-//     .append("title")
-//     .text(d => `${d.id}`);
 
 // node.append("text")
 //     .attr("x", d => d.x0 - 6)
