@@ -194,8 +194,8 @@ console.log('data: ', data)
 console.log('nodes: ', data.nodes)
 console.log('links: ', data.links)
 
-const width = 800;
-const height = 500;
+const width = document.getElementById("container").getBoundingClientRect().width;
+const height = document.getElementById("container").getBoundingClientRect().height;
 
 const colorChartMain = '#000000';
 const colorOpacity = 0.75;
@@ -203,7 +203,7 @@ const colorChartHighlight = '#FFD700';
 
 const sankey = d3.sankey()
     .nodeId(d => d.id)
-    .nodeWidth(10)
+    .nodeWidth(1)
     .nodePadding(2)
     .extent([[1, 1], [width, height]]);
 
@@ -211,6 +211,25 @@ const { nodes, links } = sankey({
     nodes: data.nodes.map(d => Object.assign({}, d)),
     links: data.links.map(d => Object.assign({}, d))
 });
+
+// Find the Oil node and calculate its height
+const oilNode = nodes.find(node => node.id === "Oil");
+if (oilNode) {
+    const oilNodeHeight = oilNode.y1 - oilNode.y0;
+    const percentage = (oilNodeHeight / window.innerWidth) * 100;
+
+    // Set CSS variable for percentage
+    document.documentElement.style.setProperty("--oil-node-percentage", `${percentage}%`);
+    console.log(`CSS variable set: --oil-node-percentage = ${percentage.toFixed(2)}%`);
+}
+
+// const oilNode = nodes.find(node => node.id === "Oil");
+// if (oilNode) {
+//     const oilNodeHeight = oilNode.y1 - oilNode.y0;
+//     console.log(`Height of the Oil node: ${oilNodeHeight}`);
+// } else {
+//     console.error("Oil node not found in the dataset");
+// }
 
 const svg = d3.select("#container").append("svg")
     .attr("width", width)
@@ -312,7 +331,6 @@ node.append("rect")
     })
     .append("title")
     .text(d => `${d.id}`);
-
 
 // node.append("text")
 //     .attr("x", d => d.x0 - 6)
