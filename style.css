@@ -1,5 +1,20 @@
 :root {
     --oil-node-percentage: 17.12%; /* Defaul */
+    --oil-node-height: 265px; /* Default */
+    --gas-node-height: 159px; /* Default */
+    --coal-node-height: 106px; /* Default */
+
+    --ubs-node-height: ;
+    --snb-node-height: ;
+    --pictec-node-height: ;
+    --zkb-node-height: ;
+    --vontobel-node-height: ;
+
+    --ubs-bar-width: 100%; /* 220 */
+    --snb-bar-width: 21%; /* 46 */
+    --pictec-bar-width: 20%; /* 44 */
+    --zkb-bar-width: 9%; /* 20 */
+    --vontobel-bar-width: 5%; /* 11 */
 }
 
 /* Reset CSS */
@@ -35,9 +50,9 @@ p {
 body {
     display: grid;
     grid-template-columns: 15% auto var(--oil-node-percentage);
-    column-gap: 1.5rem;
+    column-gap: 1rem;
 
-    padding: 0 1.5rem;
+    padding: 0 1rem;
     width: 100vw;
     height: 100vh;
 
@@ -67,7 +82,7 @@ body {
     grid-template-rows: 16% auto 10%;
     height: 100%;
 
-    padding: 1.5rem 0 1.75rem 0;
+    padding: 1rem 0 1.25rem 0;
 
     border-left: 1px solid #D1D5DB;
     border-right: 1px solid #D1D5DB;
@@ -90,7 +105,71 @@ body {
     width: 100%;
 }
 
+.bubble-chart__wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
 
+    align-items: center;
+}
+
+.bubble-chart__child {
+    background-color: black;
+    border-radius: 50%;
+}
+
+.oil-bubble {
+    width: var(--oil-node-height);
+    height: var(--oil-node-height);
+}
+
+.gas-bubble {
+    width: var(--gas-node-height);
+    height: var(--gas-node-height);
+}
+
+.coal-bubble {
+    width: var(--coal-node-height);
+    height: var(--coal-node-height);
+}
+
+
+.bar-chart__wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+
+    align-items: flex-end;
+}
+
+.bar-chart__child {
+    background-color: black;
+}
+
+.ubs-bar {
+    height: var(--ubs-node-height);
+    width: var(--ubs-bar-width);
+}
+
+.snb-bar {
+    height: var(--snb-node-height);
+    width: var(--snb-bar-width);
+}
+
+.pictec-bar {
+    height: var(--pictec-node-height);
+    width: var(--pictec-bar-width);
+}
+
+.zkb-bar {
+    height: var(--zkb-node-height);
+    width: var(--zkb-bar-width);
+}
+
+.vontobel-bar {
+    height: var(--vontobel-node-height);
+    width: var(--vontobel-bar-width);
+}
 
 /* Content Section */
 /* .content-section {

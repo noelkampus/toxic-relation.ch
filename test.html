@@ -3,119 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubble Chart</title>
+    <title>Bubble Chart from Sankey Nodes</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        .bubble {
-            fill: black;
-            opacity: 0.9;
-        }
-        .bubble:hover {
-            fill: gray;
-        }
-        .label {
-            font-size: 14px;
-            fill: white;
-            text-anchor: middle;
-        }
-        #chart {
-            width: 600px;
-            height: 800px;
-            margin: auto;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
 </head>
 <body>
-    <div id="chart"></div>
+    <div id="sankey-container"></div>
+    <div id="bubble-chart"></div>
 
     <script>
-        // Dataset directly included
-        const data = [
-            {
-                name: "UBS",
-                investments: [
-                    { oil: 1682, gas: 1009, coal: 673 },
-                    { oil: 1522, gas: 913, coal: 608 }
-                ]
-            },
-            {
-                name: "SNB",
-                investments: [
-                    { oil: 807, gas: 485, coal: 322 },
-                    { oil: 486, gas: 291, coal: 194 }
-                ]
-            },
-            {
-                name: "Pictet",
-                investments: [
-                    { oil: 435, gas: 261, coal: 174 },
-                    { oil: 309, gas: 185, coal: 124 }
-                ]
-            },
-            {
-                name: "ZKB",
-                investments: [
-                    { oil: 238, gas: 143, coal: 95 },
-                    { oil: 122, gas: 73, coal: 49 }
-                ]
-            },
-            {
-                name: "Vontobel",
-                investments: [
-                    { oil: 185, gas: 111, coal: 74 },
-                    { oil: 84, gas: 50, coal: 34 }
-                ]
-            }
+        const data = {
+            nodes: [
+                { id: "UBS" }, { id: "SNB" }, { id: "Pictet" }, { id: "ZKB" }, { id: "Vontobel" },
+                { id: "Exxon Mobil Corporation" }, { id: "Chevron Corporation" }, { id: "Partners Group Holding AG" },
+                { id: "Shell plc" }, { id: "TotalEnergies SE" }, { id: "NextEra Energy Inc" },
+                { id: "General Electric Company" }, { id: "ConocoPhillips" }, { id: "Blackstone Inc" },
+                { id: "Schlumberger Ltd (SLB)" }, { id: "BP plc" }, { id: "Canadian Natural Resources Ltd (CNRL)" },
+                { id: "The Southern Company" }, { id: "Enbridge Inc" }, { id: "Siemens AG" }, { id: "RWE AG" },
+                { id: "Sempra Energy" }, { id: "DTE Energy Co" }, { id: "National Grid plc" },
+                { id: "SSE plc" }, { id: "WEC Energy Group Inc" }, { id: "E.ON SE" }, { id: "Enel SpA" },
+                { id: "Transnet SOC Ltd" }, { id: "Petroleos Mexicanos (PEMEX)" }, { id: "JSC NC KazMunayGas (KMG)" },
+                { id: "Petro Rio SA (PRIO)" }, { id: "Oil" }, { id: "Gas" }, { id: "Coal" }
+            ],
+            links: [
+                { source: "UBS", target: "Exxon Mobil Corporation", value: 3222 },
+                { source: "UBS", target: "Chevron Corporation", value: 3011 },
+                { source: "Exxon Mobil Corporation", target: "Oil", value: 2611 },
+                { source: "Chevron Corporation", target: "Gas", value: 1242 },
+                { source: "Chevron Corporation", target: "Coal", value: 828 }
+            ]
+        };
+
+        const width = 800;
+        const height = 500;
+
+        const sankey = d3.sankey()
+            .nodeId(d => d.id)
+            .nodeWidth(1)
+            .nodePadding(2)
+            .extent([[1, 1], [width, height]]);
+
+        const { nodes, links } = sankey({
+            nodes: data.nodes.map(d => Object.assign({}, d)),
+            links: data.links.map(d => Object.assign({}, d))
+        });
+
+        const bubbleData = [
+            { id: "Oil", height: nodes.find(node => node.id === "Oil").y1 - nodes.find(node => node.id === "Oil").y0 },
+            { id: "Gas", height: nodes.find(node => node.id === "Gas").y1 - nodes.find(node => node.id === "Gas").y0 },
+            { id: "Coal", height: nodes.find(node => node.id === "Coal").y1 - nodes.find(node => node.id === "Coal").y0 }
         ];
 
-        // Calculate total investments by sector
-        const sectors = [
-            { name: "Oil", total: d3.sum(data.map(d => d3.sum(d.investments, i => i.oil))) },
-            { name: "Gas", total: d3.sum(data.map(d => d3.sum(d.investments, i => i.gas))) },
-            { name: "Coal", total: d3.sum(data.map(d => d3.sum(d.investments, i => i.coal))) }
-        ];
-
-        // Dimensions and SVG container
-        const width = 600;
-        const height = 800;
-        const svg = d3.select("#chart")
+        const bubbleSvg = d3.select("#bubble-chart")
             .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+            .attr("width", 400)
+            .attr("height", 600);
 
-        // Scale for bubble sizes
-        const sizeScale = d3.scaleSqrt()
-            .domain([0, d3.max(sectors, d => d.total)])
-            .range([50, 200]); // Adjust bubble sizes
-
-        // Bubble positions (vertically spaced)
-        const spacing = 300; // Adjust spacing between bubbles
-        const centerX = width / 2;
-        const positions = sectors.map((d, i) => ({
-            x: centerX,
-            y: spacing * i + spacing / 2,
-            radius: sizeScale(d.total),
-            ...d
-        }));
-
-        // Draw bubbles
-        svg.selectAll(".bubble")
-            .data(positions)
+        let currentY = 0;
+        bubbleSvg.selectAll("circle")
+            .data(bubbleData)
             .join("circle")
-            .attr("class", "bubble")
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y)
-            .attr("r", d => d.radius);
+            .attr("cx", 200)
+            .attr("cy", d => {
+                const radius = Math.sqrt(d.height / Math.PI) * 2;
+                const y = currentY + radius;
+                currentY += radius * 2 + 2; // 2px spacing
+                return y;
+            })
+            .attr("r", d => Math.sqrt(d.height / Math.PI) * 2)
+            .attr("fill", "black");
 
-        // Add labels
-        svg.selectAll(".label")
-            .data(positions)
+        bubbleSvg.selectAll("text")
+            .data(bubbleData)
             .join("text")
-            .attr("class", "label")
-            .attr("x", d => d.x)
-            .attr("y", d => d.y)
-            .text(d => `${d.name}\n${d.total.toLocaleString()}`)
-            .style("font-size", "14px");
+            .attr("x", 200)
+            .attr("y", d => {
+                const radius = Math.sqrt(d.height / Math.PI) * 2;
+                return currentY - radius * 2;
+            })
+            .text(d => `${d.id}: ${d.height}`);
     </script>
 </body>
 </html>
