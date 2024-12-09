@@ -318,10 +318,12 @@ node.append("rect")
             const investorId = this.dataset.investor; // Get investor ID
             highlightInvestorLinks(investorId);
             calculateAndSetInvestment(investorId); // Calculate and set CSS variables
+            updateSectorInvestmentFuture(investorId);
         });
     
         div.addEventListener("mouseout", function () {
             resetHighlights();
+            resetSectorInvestmentFuture();
         });
     });
 
@@ -581,7 +583,7 @@ function updateBubbleSizes(investorId) {
         document.documentElement.style.setProperty(`--${sector.toLowerCase()}-bubble-height`, `${newBubbleHeight}px`);
 
         // Update the bubble highlight color
-        document.documentElement.style.setProperty("--bubble-color", "#FFE100");
+        document.documentElement.style.setProperty("--chart-color", "#FFE100");
     });
 }
 
@@ -590,7 +592,7 @@ function resetBubbleSizes() {
     ["oil", "gas", "coal"].forEach(sector => {
         const defaultHeight = getComputedStyle(document.documentElement).getPropertyValue(`--${sector}-node-height`);
         document.documentElement.style.setProperty(`--${sector}-bubble-height`, defaultHeight); // Reset to default height
-        document.documentElement.style.setProperty("--bubble-color", "rgba(0, 0, 0, 0.50)"); // Reset bubble highlight color
+        document.documentElement.style.setProperty("--chart-color", "rgba(0, 0, 0, 0.50)"); // Reset bubble highlight color
     });
     console.log("Bubble heights reset to default.");
 }
@@ -605,6 +607,39 @@ document.querySelectorAll(".bar-chart__child").forEach(div => {
     div.addEventListener("mouseout", function () {
         resetBubbleSizes(); // Reset bubble sizes on mouse out
     });
+});
+
+function updateCSSVariablesOnHover(investorId) {
+    const sectorTotals = calculateSectorTotals(); // Calculate total sector investments
+    const investorContribution = calculateInvestorContribution(investorId, sectorTotals); // Investor contributions
+
+    const totalInvestment = Object.values(sectorTotals).reduce((sum, value) => sum + value, 0);
+
+    // Calculate percentages
+    const windTurbinesPercent = ((investorContribution.Oil || 0) / totalInvestment) * 100;
+    const solarParkPercent = ((investorContribution.Gas || 0) / totalInvestment) * 100;
+    const hydropowerPlantPercent = ((investorContribution.Coal || 0) / totalInvestment) * 100;
+
+    // Update CSS variables
+    document.documentElement.style.setProperty("--wind-turbines-height", `${windTurbinesPercent}%`);
+    document.documentElement.style.setProperty("--solar-park-height", `${solarParkPercent}%`);
+    document.documentElement.style.setProperty("--hydropower-plant-height", `${hydropowerPlantPercent}%`);
+}
+
+function resetCSSVariables() {
+    document.documentElement.style.setProperty("--wind-turbines-height", "100%");
+    document.documentElement.style.setProperty("--solar-park-height", "100%");
+    document.documentElement.style.setProperty("--hydropower-plant-height", "100%");
+}
+
+// Add hover event listeners to investor elements
+document.querySelectorAll(".bar-chart__child").forEach(div => {
+    div.addEventListener("mouseover", function () {
+        const investorId = this.dataset.investor; // Get investor ID
+        updateCSSVariablesOnHover(investorId);
+    });
+
+    div.addEventListener("mouseout", resetCSSVariables);
 });
 
 // node.append("text")

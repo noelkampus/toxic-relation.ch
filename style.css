@@ -20,7 +20,11 @@
     --zkb-bar-width: 9%; /* 20 */
     --vontobel-bar-width: 5%; /* 11 */
 
-    --bubble-color: rgba(000, 000, 000, 0.50);
+    --wind-turbines-height: 100%;
+    --solar-park-height: 100%;
+    --hydropower-plant-height: 100%;
+
+    --chart-color: rgba(000, 000, 000, 0.50);
 }
 
 /* Reset CSS */
@@ -55,14 +59,14 @@ p {
 
 body {
     display: grid;
-    grid-template-columns: 15% auto var(--oil-node-percentage) 10%;
+    grid-template-columns: 15% auto var(--oil-node-percentage) 15%;
     column-gap: 1rem;
 
     padding: 0 1rem;
     width: 100vw;
     height: 100vh;
 
-    background-color: #e0e0e0;
+    background-color: #E3E3E3;
 
     overflow: hidden;
 }
@@ -115,6 +119,13 @@ body {
     justify-content: flex-end;
 }
 
+.fourth-column__top-section > h1{
+    width: 100%;
+    text-align: right;
+}
+
+
+
 .top-section__text {
     width: 100%;
 }
@@ -163,7 +174,7 @@ body {
     justify-content: center;
     align-items: center;
 
-    background-color: var(--bubble-color);
+    background-color: var(--chart-color);
     border-radius: 50%;
 }
 
@@ -280,6 +291,67 @@ body {
     background-color: #cacaca; /* Line color */
     transform: translateX(-50%); /* Center align the line */
     z-index: 1000; /* Ensure it is above other elements */
+}
+
+.future-chart__single-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.25rem;
+    justify-content: space-between;
+}
+
+.oil-future-wrapper {
+    height: var(--oil-node-height);
+}
+
+.gas-future-wrapper {
+    height: var(--gas-node-height);
+}
+
+.coal-future-wrapper {
+    height: var(--coal-node-height);
+}
+
+.future-chart__future-quote {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.15rem;
+    justify-content: flex-end;
+
+    width: 100%;
+    padding: 1rem;
+}
+
+.future-chart__future-quote > h1 {
+    text-transform: uppercase;
+    color: white;
+
+    text-align: right;
+}
+
+.oil-future,
+.gas-future,
+.coal-future {
+    display: flex;
+    align-items: flex-end; /* Aligns the content at the bottom */
+    justify-content: center;
+
+    width: 100%; /* Full width of the parent container */
+    background-color: var(--chart-color);
+    transition: height 0.3s ease, background-color 0.3s ease; /* Smooth height transition */
+}
+
+.oil-future {
+    height: var(--wind-turbines-height);
+}
+
+.gas-future {
+    height: var(--solar-park-height);
+}
+
+.coal-future {
+    height: var(--hydropower-plant-height);
 }
 
 /* Content Section */
