@@ -14,11 +14,11 @@
     --zkb-node-height: ;
     --vontobel-node-height: ;
 
-    --ubs-bar-width: 100%; /* 220 */
-    --snb-bar-width: 21%; /* 46 */
-    --pictec-bar-width: 20%; /* 44 */
-    --zkb-bar-width: 9%; /* 20 */
-    --vontobel-bar-width: 5%; /* 11 */
+    --ubs-bar-width: 100%; /* 17811 */
+    --snb-bar-width: 21.26%; /* 3787 */
+    --pictec-bar-width: 21.47%; /* 3823 */
+    --zkb-bar-width: 9.57%; /* 1705 */
+    --vontobel-bar-width: 7.15%; /* 1274 */
 
     --wind-turbines-height: 100%;
     --solar-park-height: 100%;
@@ -258,7 +258,7 @@ body {
     justify-items: top;
     align-items: flex-end;
 
-    padding: 1rem;
+    /* padding: 1rem; */
 
     background-color: rgba(000, 000, 000, 0.50);
 }
@@ -267,9 +267,31 @@ body {
     background-color: #FFE100;
 }
 
-.bar-chart__child > p {
-    text-transform: uppercase;
-    color: white;
+.bar-chart__extra-wrapper {
+    display: flex;
+    flex-direction: row;
+    /* column-gap: 0.25rem; */
+    justify-content: flex-end;
+
+    width: 100%;
+}
+
+.bar-chart__text-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    padding: 0.5rem;
+}
+
+.bar-chart__text-wrapper.bar-chart__inline-text {
+    display: flex;
+    flex-direction: row;
+    column-gap: 0.25rem;
+    align-items: flex-end;
+
+    align-items: center;
+    padding: 0 0.25rem 0 0;
 }
 
 .ubs-bar {
