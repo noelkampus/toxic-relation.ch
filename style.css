@@ -29,13 +29,14 @@
     --font-family: ABCFavorit;
 
     /* Colors Variables*/
-    --background-color: #E3E3E3;
+    --background-color: #d9d9d9;
     --chart-color: rgba(000, 000, 000, 0.9);
     --chart-highlight-color: rgba(0, 0, 0, 0.90);
     --border-color: #cacaca;
 
     --text-main-color: #2A2C2B;
-    --text-sub-color: #939393;
+    --text-sub-color: #646464;
+    --text-on-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Reset CSS */
@@ -62,7 +63,7 @@ h1 {
 p {
     font-family: var(--font-family);
     font-size: 0.625rem;
-    font-weight: 00;
+    font-weight: 300;
     color: var(--text-sub-color);
 }
 
@@ -139,10 +140,12 @@ body {
     text-align: right;
 }
 
-
-
 .top-section__text {
     width: 100%;
+}
+
+.more-text {
+    padding: 0 1rem 0 1rem;
 }
 
 .bubble-chart__grid {
@@ -198,9 +201,9 @@ body {
 
 .bubble-chart__child > p {
     text-transform: uppercase;
-    color: var(--text-main-color);
+    color: var(--text-on-color);
 
-    /* mix-blend-mode: difference; */
+    mix-blend-mode: difference;
 }
 
 .oil-bubble {
@@ -279,7 +282,11 @@ body {
     flex-direction: column;
     align-items: flex-end;
 
-    padding: 0.5rem;
+    padding: 1rem;
+}
+
+.bar-chart__text-wrapper > p{
+    text-transform: uppercase;
 }
 
 .bar-chart__text-wrapper.bar-chart__inline-text {
@@ -290,11 +297,22 @@ body {
 
     align-items: center;
     padding: 0 0.25rem 0 0;
+
+    color: var(--text-sub-color);
+
 }
 
 .ubs-bar {
     height: var(--ubs-node-height);
     width: var(--ubs-bar-width);
+}
+
+.ubs-bar-text {
+    color: var(--text-on-color);
+}
+
+.bar--dimmed.bar-chart__text-wrapper > .ubs-bar-text {
+    color: var(--text-sub-color);
 }
 
 .snb-bar {
@@ -345,12 +363,12 @@ body {
     padding: 1rem;
 }
 
-.future-chart__future-quote > h1 {
+.future-chart__future-quote > p {
     text-transform: uppercase;
-    color: var(--text-main-color);
+    color: var(--text-on-color);
 
     text-align: right;
-    /* mix-blend-mode: difference; */
+    mix-blend-mode: difference;
 }
 
 .future-chart__child-wrapper {
@@ -369,10 +387,6 @@ body {
     height: 0%; /* Start with 0 height */
     background-color: var(--chart-color);
     transition: height 0.5s ease, background-color 0.3s ease; /* Smooth growth transition */
-}
-
-.future-chart__child:hover {
-    background-color: #FFE100; /* Highlight on hover */
 }
 
 .oil-future,

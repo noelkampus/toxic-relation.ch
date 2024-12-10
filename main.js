@@ -408,63 +408,63 @@ document.querySelectorAll(".bar-chart__child").forEach(bar => {
     });
 });
 
-function highlightSectorBubbles(sectorId) {
-    // Ensure only valid sector IDs are processed
-    if (["Oil", "Gas", "Coal"].includes(sectorId)) {
-        // Highlight all links into this sector
-        const sectorLinks = links.filter(link => link.target.id === sectorId);
+// function highlightSectorBubbles(sectorId) {
+//     // Ensure only valid sector IDs are processed
+//     if (["Oil", "Gas", "Coal"].includes(sectorId)) {
+//         // Highlight all links into this sector
+//         const sectorLinks = links.filter(link => link.target.id === sectorId);
 
-        sectorLinks.forEach(sectorLink => {
-            // Highlight the company-to-sector links
-            svg.selectAll("path")
-                .filter(link => link === sectorLink)
-                .attr("stroke", colorChartHighlight)
-                .attr("stroke-opacity", 1)
-                .attr("stroke-width", d => Math.max(1, d.width));
+//         sectorLinks.forEach(sectorLink => {
+//             // Highlight the company-to-sector links
+//             svg.selectAll("path")
+//                 .filter(link => link === sectorLink)
+//                 .attr("stroke", colorChartHighlight)
+//                 .attr("stroke-opacity", 1)
+//                 .attr("stroke-width", d => Math.max(1, d.width));
 
-            const companyId = sectorLink.source.id;
+//             const companyId = sectorLink.source.id;
 
-            // Highlight the company nodes
-            d3.selectAll("rect")
-                .filter(node => node.id === companyId)
-                .attr("fill", colorChartHighlight);
+//             // Highlight the company nodes
+//             d3.selectAll("rect")
+//                 .filter(node => node.id === companyId)
+//                 .attr("fill", colorChartHighlight);
 
-            // Find all investor links to this company
-            const companyInvestorLinks = links.filter(link => link.target.id === companyId);
+//             // Find all investor links to this company
+//             const companyInvestorLinks = links.filter(link => link.target.id === companyId);
 
-            companyInvestorLinks.forEach(companyInvestorLink => {
-                // Calculate the investor's contribution to the sector through this company
-                const totalCompanyValue = links
-                    .filter(link => link.source.id === companyId)
-                    .reduce((sum, link) => sum + link.value, 0);
+//             companyInvestorLinks.forEach(companyInvestorLink => {
+//                 // Calculate the investor's contribution to the sector through this company
+//                 const totalCompanyValue = links
+//                     .filter(link => link.source.id === companyId)
+//                     .reduce((sum, link) => sum + link.value, 0);
 
-                const contributionPercentage = (sectorLink.value / totalCompanyValue) * 100;
+//                 const contributionPercentage = (sectorLink.value / totalCompanyValue) * 100;
 
-                // Highlight the investor-to-company links
-                svg.selectAll("path")
-                    .filter(link => link === companyInvestorLink)
-                    .attr("stroke", colorChartHighlight)
-                    .attr("stroke-opacity", 1)
-                    .attr("stroke-width", Math.max(1, companyInvestorLink.value / 100))
-                    .append("title")
-                    .text(
-                        `${companyInvestorLink.source.id} → ${companyInvestorLink.target.id} → ${sectorLink.target.id}\n` +
-                        `Contribution to sector: ${contributionPercentage.toFixed(2)}%`
-                    );
+//                 // Highlight the investor-to-company links
+//                 svg.selectAll("path")
+//                     .filter(link => link === companyInvestorLink)
+//                     .attr("stroke", colorChartHighlight)
+//                     .attr("stroke-opacity", 1)
+//                     .attr("stroke-width", Math.max(1, companyInvestorLink.value / 100))
+//                     .append("title")
+//                     .text(
+//                         `${companyInvestorLink.source.id} → ${companyInvestorLink.target.id} → ${sectorLink.target.id}\n` +
+//                         `Contribution to sector: ${contributionPercentage.toFixed(2)}%`
+//                     );
 
-                // Highlight the investor nodes
-                d3.selectAll("rect")
-                    .filter(node => node.id === companyInvestorLink.source.id)
-                    .attr("fill", colorChartHighlight);
-            });
-        });
+//                 // Highlight the investor nodes
+//                 d3.selectAll("rect")
+//                     .filter(node => node.id === companyInvestorLink.source.id)
+//                     .attr("fill", colorChartHighlight);
+//             });
+//         });
 
-        // Highlight the sector bubble itself
-        d3.selectAll(".bubble-chart__child")
-            .filter(bubble => bubble.dataset.sector === sectorId) // Assuming bubbles have `data-sector` attribute
-            .style("background-color", colorChartHighlight);
-    }
-}
+//         // Highlight the sector bubble itself
+//         d3.selectAll(".bubble-chart__child")
+//             .filter(bubble => bubble.dataset.sector === sectorId) // Assuming bubbles have `data-sector` attribute
+//             .style("background-color", colorChartHighlight);
+//     }
+// }
 
 function resetHighlights() {
     // Reset the investor node color
@@ -745,18 +745,18 @@ function updateFutureInvestments(investorContributions) {
 
     // Update the DOM for each future investment
     document.querySelector(".oil-future-wrapper .future-chart__future-quote").innerHTML = `
-        <h1>${futureInvestments.windTurbines} Wind turbines</h1>
-        <h1>power ${futureInvestments.households} households</h1>
+        <p>${futureInvestments.windTurbines} Wind turbines</p>
+        <p>power ${futureInvestments.households} households</p>
     `;
 
     document.querySelector(".gas-future-wrapper .future-chart__future-quote").innerHTML = `
-        <h1>${futureInvestments.solarParks} Solar parks</h1>
-        <h1>power ${futureInvestments.schools} schools</h1>
+        <p>${futureInvestments.solarParks} Solar parks</p>
+        <p>power ${futureInvestments.schools} schools</p>
     `;
 
     document.querySelector(".coal-future-wrapper .future-chart__future-quote").innerHTML = `
-        <h1>${futureInvestments.hydropowerPlants} Hydropower plants</h1>
-        <h1>power ${futureInvestments.farms} farms</h1>
+        <p>${futureInvestments.hydropowerPlants} Hydropower plants</p>
+        <p>power ${futureInvestments.farms} farms</p>
     `;
 }
 
@@ -776,18 +776,18 @@ function resetFutureInvestments(data) {
 
     // Update the DOM with default values
     document.querySelector(".oil-future-wrapper .future-chart__future-quote").innerHTML = `
-        <h1>${defaultInvestments.windTurbines} Wind turbines</h1>
-        <h1>power ${defaultInvestments.households} households</h1>
+        <p>${defaultInvestments.windTurbines} Wind turbines</p>
+        <p>power ${defaultInvestments.households} households</p>
     `;
 
     document.querySelector(".gas-future-wrapper .future-chart__future-quote").innerHTML = `
-        <h1>${defaultInvestments.solarParks} Solar parks</h1>
-        <h1>power ${defaultInvestments.schools} schools</h1>
+        <p>${defaultInvestments.solarParks} Solar parks</p>
+        <p>power ${defaultInvestments.schools} schools</p>
     `;
 
     document.querySelector(".coal-future-wrapper .future-chart__future-quote").innerHTML = `
-        <h1>${defaultInvestments.hydropowerPlants} Hydropower plants</h1>
-        <h1>power ${defaultInvestments.farms} farms</h1>
+        <p>${defaultInvestments.hydropowerPlants} Hydropower plants</p>
+        <p>power ${defaultInvestments.farms} farms</p>
     `;
 }
 
@@ -806,27 +806,73 @@ document.querySelectorAll(".bar-chart__child").forEach(bar => {
     });
 });
 
-// Add text for company nodes and investment values, initially hidden
+// Utility function to determine contrasting text color
+function getContrastingColor(backgroundColor) {
+    // Parse the background color to RGB
+    const rgb = d3.color(backgroundColor);
+
+    // If the color can't be parsed, default to black
+    if (!rgb) return "#000";
+
+    // Calculate luminance (relative brightness of the color)
+    const luminance = 0.2126 * (rgb.r / 255) + 0.7152 * (rgb.g / 255) + 0.0722 * (rgb.b / 255);
+
+    // Return #000 (black) for bright backgrounds and #fff (white) for dark backgrounds
+    return luminance > 0.5 ? "#000" : "#fff";
+}
+
+// Add text for company nodes
 const companyLabels = node
     .filter(d => d.depth > 0) // Filter to company nodes only
     .append("text")
     .attr("text-anchor", "end") // Align text to the right
     .attr("font-family", "ABCFavorit") // Use custom font
     .attr("font-size", "10px") // Adjust font size
-    .attr("fill", "#000") // Text color
+    .attr("fill", d => {
+        // Get computed background color of the parent container
+        const backgroundColor = window.getComputedStyle(document.body).backgroundColor || "#fff";
+        return getContrastingColor(backgroundColor); // Set text color based on contrast
+    })
     .text(d => d.id) // Display company name
     .attr("class", "company-label")
     .attr("visibility", "hidden"); // Initially hidden
 
+// Add text for investment values
 const investmentValues = node
     .filter(d => d.depth > 0) // Filter to company nodes only
     .append("text")
     .attr("text-anchor", "end") // Align text to the right
     .attr("font-family", "ABCFavorit") // Use custom font
     .attr("font-size", "10px") // Adjust font size
-    .attr("fill", "#000") // Text color
+    .attr("fill", d => {
+        // Get computed background color of the parent container
+        const backgroundColor = window.getComputedStyle(document.body).backgroundColor || "#fff";
+        return getContrastingColor(backgroundColor); // Set text color based on contrast
+    })
     .attr("class", "investment-value-label")
     .attr("visibility", "hidden"); // Initially hidden
+
+// // Add text for company nodes and investment values, initially hidden
+// const companyLabels = node
+//     .filter(d => d.depth > 0) // Filter to company nodes only
+//     .append("text")
+//     .attr("text-anchor", "end") // Align text to the right
+//     .attr("font-family", "ABCFavorit") // Use custom font
+//     .attr("font-size", "10px") // Adjust font size
+//     .attr("fill", "#000") // Text color
+//     .text(d => d.id) // Display company name
+//     .attr("class", "company-label")
+//     .attr("visibility", "hidden"); // Initially hidden
+
+// const investmentValues = node
+//     .filter(d => d.depth > 0) // Filter to company nodes only
+//     .append("text")
+//     .attr("text-anchor", "end") // Align text to the right
+//     .attr("font-family", "ABCFavorit") // Use custom font
+//     .attr("font-size", "10px") // Adjust font size
+//     .attr("fill", "#000") // Text color
+//     .attr("class", "investment-value-label")
+//     .attr("visibility", "hidden"); // Initially hidden
 
 // Function to update and show text on hover
 function highlightInvestorLinksAndValues(investorId) {
