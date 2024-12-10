@@ -1,3 +1,4 @@
+/* CSS Variables */
 :root {
     --oil-node-percentage: 17.12%;
     --oil-node-height: 265px;
@@ -24,7 +25,17 @@
     --solar-park-height: 100%;
     --hydropower-plant-height: 100%;
 
-    --chart-color: rgba(000, 000, 000, 0.50);
+    /* Font Variables */
+    --font-family: ABCFavorit;
+
+    /* Colors Variables*/
+    --background-color: #E3E3E3;
+    --chart-color: rgba(000, 000, 000, 0.9);
+    --chart-highlight-color: rgba(0, 0, 0, 0.90);
+    --border-color: #cacaca;
+
+    --text-main-color: #2A2C2B;
+    --text-sub-color: #939393;
 }
 
 /* Reset CSS */
@@ -41,33 +52,30 @@
   }
 
 h1 {
-    font-family: ABCFavorit;
+    font-family: var(--font-family);
     font-size: 0.625rem;
     font-weight: 400;
-    color: #1A202C;
+    color: var(--text-main-color);
     text-transform:uppercase;
 }
 
 p {
-    font-family: ABCFavorit;
+    font-family: var(--font-family);
     font-size: 0.625rem;
-    font-weight: 400;
-    color: #1A202C;
+    font-weight: 00;
+    color: var(--text-sub-color);
 }
-
-/* Colors */
 
 body {
     display: flex;
     flex-direction: row;
-    /* grid-template-columns: 15% auto var(--oil-node-percentage) 15%; */
     column-gap: 1rem;
 
     padding: 0 1rem;
     width: 100vw;
     height: 100vh;
 
-    background-color: #E3E3E3;
+    background-color: var(--background-color);
 
     overflow: hidden;
 }
@@ -95,8 +103,8 @@ body {
 
     padding: 1rem 0 1.25rem 0;
 
-    border-left: 1px solid #cacaca;
-    border-right: 1px solid #cacaca;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
 }
 
 .first-column {
@@ -116,16 +124,10 @@ body {
 }
 
 /* Top Section*/
-/* .top-section {
-    display: grid;
-    grid-template-columns: 15% auto 20%;
-    column-gap: 1.5rem;
-} */
 
 .top-section__wrapper {
     display: flex;
     flex-direction: row;
-    /* column-gap: 3rem; */
 }
 
 .third-column__top-section {
@@ -150,8 +152,8 @@ body {
 }
 
 .grid-activated {
-    border-top: 1px solid #cacaca;
-    border-bottom: 1px solid #cacaca;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .bubble-chart__single-wrapper {
@@ -175,7 +177,6 @@ body {
 .bubble-chart__wrapper {
     display: flex;
     flex-direction: column;
-    /* row-gap: 2px; */
 
     align-items: center;
 }
@@ -192,14 +193,14 @@ body {
 }
 
 .bubble-chart__child:hover {
-    background-color: #FFE100;
+    background-color: var(--chart-highlight-color);
 }
 
 .bubble-chart__child > p {
     text-transform: uppercase;
-    color: white;
+    color: var(--text-main-color);
 
-    mix-blend-mode: difference;
+    /* mix-blend-mode: difference; */
 }
 
 .oil-bubble {
@@ -221,7 +222,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #cacaca;
+    border: 1px solid var(--border-color);
     border-radius: 50%;
 
     transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
@@ -258,19 +259,16 @@ body {
     justify-items: top;
     align-items: flex-end;
 
-    /* padding: 1rem; */
-
-    background-color: rgba(000, 000, 000, 0.50);
+    background-color: rgba(000, 000, 000, 0.9);
 }
 
 .bar-chart__child:hover {
-    background-color: #FFE100;
+    background-color: var(--chart-highlight-color);
 }
 
 .bar-chart__extra-wrapper {
     display: flex;
     flex-direction: row;
-    /* column-gap: 0.25rem; */
     justify-content: flex-end;
 
     width: 100%;
@@ -318,18 +316,6 @@ body {
     height: var(--vontobel-node-height);
     width: var(--vontobel-bar-width);
 }
-
-.center-line {
-    position: absolute;
-    top: 0;
-    left: 50%; /* Center horizontally */
-    width: 1px; /* Line thickness */
-    height: 100vh; /* Full height of the viewport */
-    background-color: #cacaca; /* Line color */
-    transform: translateX(-50%); /* Center align the line */
-    z-index: 1000; /* Ensure it is above other elements */
-}
-
 .future-chart__single-wrapper {
     display: flex;
     flex-direction: column;
@@ -361,10 +347,10 @@ body {
 
 .future-chart__future-quote > h1 {
     text-transform: uppercase;
-    color: white;
+    color: var(--text-main-color);
 
     text-align: right;
-    mix-blend-mode: difference;
+    /* mix-blend-mode: difference; */
 }
 
 .future-chart__child-wrapper {
@@ -413,31 +399,13 @@ body {
     height: var(--hydropower-plant-height);
 }
 
-/* Content Section */
-/* .content-section {
-    display: grid;
-    grid-template-columns: 15% auto 20%;
-    column-gap: 1.5rem;
-} */
-
-/* .content-section__wrapper-content {
-    height: 100%;
-} */
-
-/* Bottom Section */
-/* .bottom-section {
-    display: grid;
-    grid-template-columns: 15% auto 20%;
-    column-gap: 1.5rem;
-} */
-
 .bottom-section__wrapper {
     display: flex;
     flex-direction: column;
 
     row-gap: 0.25rem;
 
-    z-index: 99;
+    z-index: 2;
 }
 
 .bottom-section__wrapper > div > p {
@@ -449,4 +417,46 @@ body {
     justify-content: space-between;
 
     padding-top: 3rem;
+}
+
+.company-over-line {
+    z-index: 99;
+}
+
+.company-background {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%; /* Center horizontally */
+    width: 1px; /* Line thickness */
+    height: 4vh; /* Full height of the viewport */
+    background-color: var(--background-color); /* Line color */
+    transform: translateX(-50%); /* Center align the line */
+    z-index: 51; /* Ensure it is above other elements */
+}
+
+.center-line {
+    position: absolute;
+    top: 0;
+    left: 50%; /* Center horizontally */
+    width: 1px; /* Line thickness */
+    height: 100vh; /* Full height of the viewport */
+    background-color: var(--border-color); /* Line color */
+    transform: translateX(-50%); /* Center align the line */
+    z-index: 50; /* Ensure it is above other elements */
+}
+
+.bar--dimmed {
+    background-color: #000; /* Light gray for non-hovered bars */
+    opacity: 0.1;
+}
+
+.bar--highlighted {
+    background-color: var(--chart-color); /* Highlight color for hovered bar */
+    opacity: 1;
+}
+
+path.highlight {
+    stroke: var(--chart-color); /* Highlight color */
+    stroke-opacity: 1; /* Full opacity */
+    transition: stroke 0.3s, stroke-opacity 0.3s; /* Smooth transitions */
 }

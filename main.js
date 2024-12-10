@@ -203,8 +203,9 @@ const width = document.getElementById("container").getBoundingClientRect().width
 const height = document.getElementById("container").getBoundingClientRect().height;
 
 const colorChartMain = '#000000';
-const colorOpacity = 0.50;
-const colorChartHighlight = '#FFE100';
+let colorOpacity = 0.9;
+const colorChartHighlight = '#FF0600';
+// let colorOpacityHighlight = 0.9;
 
 const sankey = d3.sankey()
     .nodeId(d => d.id)
@@ -264,14 +265,6 @@ if (oilNode) {
     console.log(`CSS variable set: --vontobel-node-height = ${vontobelNodeHeight}`);
 }
 
-// const oilNode = nodes.find(node => node.id === "Oil");
-// if (oilNode) {
-//     const oilNodeHeight = oilNode.y1 - oilNode.y0;
-//     console.log(`Height of the Oil node: ${oilNodeHeight}`);
-// } else {
-//     console.error("Oil node not found in the dataset");
-// }
-
 const svg = d3.select("#container").append("svg")
     .attr("width", width)
     .attr("height", height);
@@ -281,21 +274,10 @@ const svg = d3.select("#container").append("svg")
     .data(links)
     .join("path")
     .attr("d", d3.sankeyLinkHorizontal())
-    // .attr("stroke", d => d.source.id === "UBS" ? "#FF5733" : "#0C667E") // UBS links in orange
     .attr("stroke", colorChartMain)
     .attr("stroke-width", d => Math.max(1, d.width))
     .attr("stroke-opacity", colorOpacity)
     .attr("fill", "none")
-    // .on("mouseover", function (event, d) {
-    //     d3.select(this)
-    //         .attr("stroke-opacity", colorOpacity) // Emphasize link on hover
-    //         .attr("stroke", colorChartHighlight); // Change link color to gold
-    // })
-    // .on("mouseout", function (event, d) {
-    //     d3.select(this)
-    //         .attr("stroke-opacity", colorOpacity) // Reset opacity
-    //         .attr("stroke", colorChartMain); // Reset color
-    // })
     .append("title")
     .text(d => `${d.source.id} → ${d.target.id}\n${d.value}`);
 
@@ -339,45 +321,54 @@ node.append("rect")
     });
 
 function highlightInvestorLinks(investorId) {
-
     // Get links for the selected investor
     const investorLinks = links.filter(link => link.source.id === investorId);
 
     // Highlight the investor node
-    // `d` is not defined in this scope, replacing it with `investorId`
     d3.selectAll("rect")
-        .filter(node => node.id === investorId)
-        .attr("fill", colorChartHighlight);
+        .classed("highlight-node", d => d.id === investorId)
+        .attr("fill", d => (d.id === investorId ? colorChartHighlight : null));
 
-    // Highlight all links from the investor to companies
-    svg.selectAll("path")
-        .filter(link => link.source.id === investorId)
-        .attr("stroke", colorChartHighlight)
-        .attr("stroke-opacity", 1);
+    // Create overlay paths for investor-to-company links, using full link value
+    svg.selectAll(".investor-overlay")
+        .data(investorLinks, d => d.target.id) // Bind data to company IDs
+        .join(
+            enter =>
+                enter
+                    .append("path")
+                    .attr("class", "investor-overlay highlight")
+                    .attr("d", d3.sankeyLinkHorizontal())
+                    .attr("stroke", colorChartHighlight)
+                    .attr("stroke-width", d => Math.max(1, d.width)) // Scale dynamically based on full value
+                    .attr("stroke-opacity", 1)
+                    .attr("fill", "none"),
+            update =>
+                update
+                    .attr("stroke-width", d => Math.max(1, d.width)) // Update with full value scaling
+                    .attr("stroke-opacity", 1),
+            exit => exit.remove() // Remove outdated paths
+        );
 
-    // Highlight all company-to-sector links based on investor's contribution
+    // Highlight company-to-sector links based on investor's contribution
     investorLinks.forEach(investorLink => {
         const companyId = investorLink.target.id;
         const investmentValue = investorLink.value;
 
-        // Highlight all sector-to-company links based on company value
         const companySectorLinks = links.filter(link => link.source.id === companyId);
         companySectorLinks.forEach(sectorLink => {
             const totalCompanyValue = links
                 .filter(link => link.source.id === companyId)
                 .reduce((sum, link) => sum + link.value, 0);
 
-            // Calculate the investor's contribution for each sector link
             const investorContribution = (sectorLink.value / totalCompanyValue) * investmentValue;
 
             if (investorContribution > 0) {
-                // Overlay the adjusted link for the investor's contribution
                 svg.append("path")
-                    .attr("class", "highlight") // Class for dynamic removal
+                    .attr("class", "highlight highlight-contribution")
                     .attr("d", d3.sankeyLinkHorizontal()(sectorLink))
-                    .attr("stroke", colorChartHighlight) // Highlight adjusted links
-                    .attr("stroke-width", Math.max(1, investorContribution / 100)) // Scale dynamically
-                    .attr("stroke-opacity", 0.9)
+                    .attr("stroke", colorChartHighlight)
+                    .attr("stroke-width", Math.max(1, investorContribution / 100)) // Scaled dynamically
+                    .attr("stroke-opacity", 1)
                     .attr("fill", "none")
                     .append("title")
                     .text(
@@ -388,6 +379,34 @@ function highlightInvestorLinks(investorId) {
         });
     });
 }
+
+// Hover interaction for investor bar chart
+document.querySelectorAll(".bar-chart__child").forEach(bar => {
+    bar.addEventListener("mouseover", function () {
+        const investorId = this.dataset.investor;
+
+        // Highlight links related to the hovered investor
+        highlightInvestorLinks(investorId);
+
+        // Dim non-highlighted links
+        svg.selectAll("path:not(.highlight)")
+            .attr("stroke-opacity", 0.1);
+    });
+
+    bar.addEventListener("mouseout", function () {
+        // Reset highlights
+        svg.selectAll(".highlight, .investor-overlay")
+            .classed("highlight", false)
+            .attr("stroke", null)
+            .attr("stroke-width", null)
+            .attr("stroke-opacity", 0.9)
+            .remove(); // Clear overlays
+
+        d3.selectAll("rect")
+            .classed("highlight-node", false)
+            .attr("fill", null);
+    });
+});
 
 function highlightSectorBubbles(sectorId) {
     // Ensure only valid sector IDs are processed
@@ -457,7 +476,7 @@ function resetHighlights() {
             return !d3.select(this).classed("highlight");
         }) // Ignore dynamically added highlights
         .attr("stroke", colorChartMain)
-        .attr("stroke-opacity", 0.50)
+        .attr("stroke-opacity", colorOpacity)
         .attr("stroke-width", d => Math.max(1, d.width));
 
     // Remove dynamically created highlights
@@ -467,64 +486,6 @@ function resetHighlights() {
     d3.selectAll(".bubble-chart__child")
     .style("background-color", ""); // Reset to default stylex
 }
-
-// function calculateSectorTotals() {
-//     // Initialize total investments for each sector
-//     const sectorTotals = { Oil: 0, Gas: 0, Coal: 0 };
-
-//     // Sum up investments for each sector across all links
-//     links.forEach(link => {
-//         if (sectorTotals[link.target.id] !== undefined) {
-//             sectorTotals[link.target.id] += link.value;
-//         }
-//     });
-
-//     return sectorTotals;
-// }
-
-// function calculateInvestorContribution(investorId, sectorTotals) {
-//     // Initialize investments for the selected investor in each sector
-//     const investorSectorTotals = { Oil: 0, Gas: 0, Coal: 0 };
-
-//     // Get all links for the given investor
-//     const investorLinks = links.filter(link => link.source.id === investorId);
-
-//     // Calculate the investor's contribution to each sector
-//     investorLinks.forEach(link => {
-//         const companyId = link.target.id;
-
-//         // Find sector links related to this company
-//         links.filter(l => l.source.id === companyId).forEach(sectorLink => {
-//             if (investorSectorTotals[sectorLink.target.id] !== undefined) {
-//                 investorSectorTotals[sectorLink.target.id] += sectorLink.value;
-//             }
-//         });
-//     });
-
-//     // Calculate percentage contribution for each sector and log to console
-//     Object.keys(sectorTotals).forEach(sector => {
-//         const sectorTotal = sectorTotals[sector];
-//         const investorContribution = investorSectorTotals[sector];
-//         const percentage = sectorTotal > 0 ? (investorContribution / sectorTotal) * 100 : 0;
-
-//         console.log(
-//             `Investor ${investorId}'s contribution to ${sector}: ${investorContribution} (${percentage.toFixed(2)}% of ${sector} total: ${sectorTotal})`
-//         );
-//     });
-// }
-
-// // Add event listeners for bar chart elements
-// document.querySelectorAll(".bar-chart__child").forEach(div => {
-//     div.addEventListener("mouseover", function () {
-//         const investorId = this.dataset.investor; // Get investor ID from data attribute
-//         const sectorTotals = calculateSectorTotals(); // Calculate total investments per sector
-//         calculateInvestorContribution(investorId, sectorTotals); // Calculate and log investor contributions
-//     });
-
-//     div.addEventListener("mouseout", function () {
-//         console.log("Mouse out: Reset");
-//     });
-// });
 
 function calculateSectorTotals() {
     // Initialize total investments for each sector
@@ -583,7 +544,7 @@ function updateBubbleSizes(investorId) {
         document.documentElement.style.setProperty(`--${sector.toLowerCase()}-bubble-height`, `${newBubbleHeight}px`);
 
         // Update the bubble highlight color
-        document.documentElement.style.setProperty("--chart-color", "#FFE100");
+        document.documentElement.style.setProperty("--chart-color", "rgba(0, 0, 0, 0.90)");
     });
 }
 
@@ -592,7 +553,7 @@ function resetBubbleSizes() {
     ["oil", "gas", "coal"].forEach(sector => {
         const defaultHeight = getComputedStyle(document.documentElement).getPropertyValue(`--${sector}-node-height`);
         document.documentElement.style.setProperty(`--${sector}-bubble-height`, defaultHeight); // Reset to default height
-        document.documentElement.style.setProperty("--chart-color", "rgba(0, 0, 0, 0.50)"); // Reset bubble highlight color
+        document.documentElement.style.setProperty("--chart-color", "rgba(0, 0, 0, 0.90)"); // Reset bubble highlight color
     });
     console.log("Bubble heights reset to default.");
 }
@@ -914,6 +875,28 @@ document.querySelectorAll(".bar-chart__child").forEach(bar => {
 
     bar.addEventListener("mouseout", function () {
         resetInvestorLinksAndValues(); // Hide text for all nodes
+    });
+});
+
+document.querySelectorAll(".bar-chart__child").forEach(bar => {
+    bar.addEventListener("mouseover", function () {
+        const hoveredInvestor = bar.dataset.investor; // Get the investor name of the hovered bar
+
+        // Change the color of all other bars
+        document.querySelectorAll(".bar-chart__child").forEach(otherBar => {
+            if (otherBar.dataset.investor !== hoveredInvestor) {
+                otherBar.classList.add("bar--dimmed"); // Apply dimmed style to non-hovered bars
+            } else {
+                otherBar.classList.add("bar--highlighted"); // Highlight the hovered bar
+            }
+        });
+    });
+
+    bar.addEventListener("mouseout", function () {
+        // Reset all bars to their default styles
+        document.querySelectorAll(".bar-chart__child").forEach(otherBar => {
+            otherBar.classList.remove("bar--dimmed", "bar--highlighted");
+        });
     });
 });
 
