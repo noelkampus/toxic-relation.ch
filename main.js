@@ -642,6 +642,200 @@ document.querySelectorAll(".bar-chart__child").forEach(div => {
     div.addEventListener("mouseout", resetCSSVariables);
 });
 
+function updateBubbleChart(sectorContributions) {
+    // Update bubble chart values for each sector
+    ["Oil", "Gas", "Coal"].forEach(sector => {
+        const bubbleElement = document.querySelector(`.bubble-chart__child[data-sector="${sector}"]`);
+        if (bubbleElement) {
+            const sectorValue = Math.floor(sectorContributions[sector] || 0); // Ensure value is an integer
+            const valueElement = bubbleElement.querySelector("p:last-child");
+            if (valueElement) {
+                valueElement.textContent = `${sectorValue}`; // Update bubble value
+            }
+        }
+    });
+}
+
+function calculateInvestorContributionsToSectors(investorId) {
+    // Calculate the contribution of a specific investor to each sector
+    const investorLinks = links.filter(link => link.source.id === investorId);
+
+    const sectorContributions = { Oil: 0, Gas: 0, Coal: 0 };
+
+    investorLinks.forEach(investorLink => {
+        const companyId = investorLink.target.id;
+        const investmentValue = investorLink.value;
+
+        // Find links from the company to the sectors
+        const companyToSectorLinks = links.filter(link => link.source.id === companyId);
+
+        companyToSectorLinks.forEach(sectorLink => {
+            const totalCompanyInvestment = companyToSectorLinks.reduce((sum, link) => sum + link.value, 0);
+            const sectorId = sectorLink.target.id;
+
+            if (sectorContributions[sectorId] !== undefined) {
+                sectorContributions[sectorId] +=
+                    (sectorLink.value / totalCompanyInvestment) * investmentValue;
+            }
+        });
+    });
+
+    return sectorContributions;
+}
+
+function updateChartsFromSankey(data) {
+    // Get all investors from the Sankey chart data
+    const investors = data.nodes.filter(node =>
+        data.links.some(link => link.source === node.id)
+    );
+
+    // Calculate total investment per investor (already in millions)
+    const investorTotals = investors.map(investor => {
+        const totalInvestment = data.links
+            .filter(link => link.source === investor.id)
+            .reduce((sum, link) => sum + link.value, 0);
+
+        return { id: investor.id, total: Math.floor(totalInvestment) };
+    });
+
+    // Update bar chart dynamically
+    investorTotals.forEach(({ id, total }) => {
+        const barElement = document.querySelector(`.bar-chart__child[data-investor="${id}"]`);
+        if (barElement) {
+            const totalInvestmentElement = barElement.querySelector("p:last-child");
+            if (totalInvestmentElement) {
+                totalInvestmentElement.textContent = `${total}`; // Set total investment (in millions)
+            }
+        }
+    });
+
+    // Add hover effect for updating the bubble chart
+    document.querySelectorAll(".bar-chart__child").forEach(bar => {
+        bar.addEventListener("mouseover", function () {
+            const investorId = this.dataset.investor;
+            const sectorContributions = calculateInvestorContributionsToSectors(investorId);
+            updateBubbleChart(sectorContributions); // Update bubble chart dynamically
+        });
+
+        bar.addEventListener("mouseout", function () {
+            resetBubbleChart(data); // Reset bubble chart to default values
+        });
+    });
+}
+
+function resetBubbleChart(data) {
+    // Reset bubble chart values to total sector investments
+    const sectorTotals = {
+        Oil: data.links
+            .filter(link => link.target === "Oil")
+            .reduce((sum, link) => sum + link.value, 0),
+        Gas: data.links
+            .filter(link => link.target === "Gas")
+            .reduce((sum, link) => sum + link.value, 0),
+        Coal: data.links
+            .filter(link => link.target === "Coal")
+            .reduce((sum, link) => sum + link.value, 0)
+    };
+
+    ["Oil", "Gas", "Coal"].forEach(sector => {
+        const bubbleElement = document.querySelector(`.bubble-chart__child[data-sector="${sector}"]`);
+        if (bubbleElement) {
+            const sectorValue = Math.floor(sectorTotals[sector]);
+            const valueElement = bubbleElement.querySelector("p:last-child");
+            if (valueElement) {
+                valueElement.textContent = `${sectorValue}`; // Reset bubble value
+            }
+        }
+    });
+}
+
+// Example usage
+updateChartsFromSankey(data);
+
+// Function to update wind turbines, solar parks, and hydropower plants
+function updateFutureInvestments(investorContributions) {
+    const perUnitValues = {
+        Oil: { windTurbines: 2.5, households: 10000 }, // 1 unit of Oil → 2.5 wind turbines, 10k households
+        Gas: { solarParks: 0.1, schools: 50 },        // 1 unit of Gas → 0.1 solar parks, 50 schools
+        Coal: { hydropowerPlants: 0.3, farms: 2000 }  // 1 unit of Coal → 0.3 hydropower plants, 2k farms
+    };
+
+    // Calculate the investments based on the contributions
+    const futureInvestments = {
+        windTurbines: Math.floor(investorContributions.Oil * perUnitValues.Oil.windTurbines || 0),
+        households: Math.floor(investorContributions.Oil * perUnitValues.Oil.households || 0),
+        solarParks: Math.floor(investorContributions.Gas * perUnitValues.Gas.solarParks || 0),
+        schools: Math.floor(investorContributions.Gas * perUnitValues.Gas.schools || 0),
+        hydropowerPlants: Math.floor(investorContributions.Coal * perUnitValues.Coal.hydropowerPlants || 0),
+        farms: Math.floor(investorContributions.Coal * perUnitValues.Coal.farms || 0)
+    };
+
+    // Update the DOM for each future investment
+    document.querySelector(".oil-future-wrapper .future-chart__future-quote").innerHTML = `
+        <h1>${futureInvestments.windTurbines} Wind turbines</h1>
+        <h1>power ${futureInvestments.households} households</h1>
+    `;
+
+    document.querySelector(".gas-future-wrapper .future-chart__future-quote").innerHTML = `
+        <h1>${futureInvestments.solarParks} Solar parks</h1>
+        <h1>power ${futureInvestments.schools} schools</h1>
+    `;
+
+    document.querySelector(".coal-future-wrapper .future-chart__future-quote").innerHTML = `
+        <h1>${futureInvestments.hydropowerPlants} Hydropower plants</h1>
+        <h1>power ${futureInvestments.farms} farms</h1>
+    `;
+}
+
+// Reset function for future investments
+function resetFutureInvestments(data) {
+    const sectorTotals = calculateSectorTotals();
+
+    // Total sector investments for default values
+    const defaultInvestments = {
+        windTurbines: Math.floor(sectorTotals.Oil * 2.5),
+        households: Math.floor(sectorTotals.Oil * 10000),
+        solarParks: Math.floor(sectorTotals.Gas * 0.1),
+        schools: Math.floor(sectorTotals.Gas * 50),
+        hydropowerPlants: Math.floor(sectorTotals.Coal * 0.3),
+        farms: Math.floor(sectorTotals.Coal * 2000)
+    };
+
+    // Update the DOM with default values
+    document.querySelector(".oil-future-wrapper .future-chart__future-quote").innerHTML = `
+        <h1>${defaultInvestments.windTurbines} Wind turbines</h1>
+        <h1>power ${defaultInvestments.households} households</h1>
+    `;
+
+    document.querySelector(".gas-future-wrapper .future-chart__future-quote").innerHTML = `
+        <h1>${defaultInvestments.solarParks} Solar parks</h1>
+        <h1>power ${defaultInvestments.schools} schools</h1>
+    `;
+
+    document.querySelector(".coal-future-wrapper .future-chart__future-quote").innerHTML = `
+        <h1>${defaultInvestments.hydropowerPlants} Hydropower plants</h1>
+        <h1>power ${defaultInvestments.farms} farms</h1>
+    `;
+}
+
+// Add hover event listeners for future investments
+document.querySelectorAll(".bar-chart__child").forEach(bar => {
+    bar.addEventListener("mouseover", function () {
+        const investorId = this.dataset.investor;
+        const sectorTotals = calculateSectorTotals();
+        const investorContributions = calculateInvestorContribution(investorId, sectorTotals);
+
+        updateFutureInvestments(investorContributions); // Update future investments
+    });
+
+    bar.addEventListener("mouseout", function () {
+        resetFutureInvestments(data); // Reset future investments
+    });
+});
+
+// Initialize default future investments on page load
+resetFutureInvestments(data);
+
 // node.append("text")
 //     .attr("x", d => d.x0 - 6)
 //     .attr("y", d => (d.y1 + d.y0) / 2)

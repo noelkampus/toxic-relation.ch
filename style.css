@@ -312,7 +312,6 @@ body {
     display: flex;
     flex-direction: column;
     row-gap: 0.25rem;
-    justify-content: space-between;
 }
 
 .oil-future-wrapper {
@@ -344,6 +343,28 @@ body {
 
     text-align: right;
     mix-blend-mode: difference;
+}
+
+.future-chart__child-wrapper {
+    display: flex;
+    align-items: flex-end; /* Aligns the bars to grow from the bottom */
+    justify-content: center;
+    height: 100%; /* Takes full height of the wrapper */
+    width: 100%; /* Full width for alignment */
+}
+
+.future-chart__child {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Ensure content stays at the bottom of the bar */
+    width: 100%; /* Full width of the container */
+    height: 0%; /* Start with 0 height */
+    background-color: var(--chart-color);
+    transition: height 0.5s ease, background-color 0.3s ease; /* Smooth growth transition */
+}
+
+.future-chart__child:hover {
+    background-color: #FFE100; /* Highlight on hover */
 }
 
 .oil-future,
