@@ -99,7 +99,7 @@ body {
 .column-section {
     position: relative;
     display: grid;
-    grid-template-rows: 16% auto 10%;
+    grid-template-rows: 16% 74% 10%;
     height: 100%;
 
     padding: 1rem 0 1.25rem 0;
@@ -113,7 +113,7 @@ body {
 }
 
 .second-column {
-    width: auto;
+    width: 100%;
 }
 
 .third-column {
@@ -206,6 +206,12 @@ body {
     mix-blend-mode: difference;
 }
 
+.oil-bubble,
+.gas-bubble,
+.coal-bubble {
+    transition: height 0.3s ease, width 0.3s ease; /* Smooth height transition */
+}
+
 .oil-bubble {
     width: var(--oil-bubble-height);
     height: var(--oil-bubble-height);
@@ -228,7 +234,6 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 50%;
 
-    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
 }
 
 .full-oil-bubble {
@@ -299,6 +304,15 @@ body {
     padding: 0 0.25rem 0 0;
 
     color: var(--text-sub-color);
+
+}
+
+.ubs-bar,
+.snb-bar,
+.pictec-bar,
+.zkb-bar,
+.vontobel-bar {
+    transition: background-color 0.3s ease;
 
 }
 
@@ -386,7 +400,6 @@ body {
     width: 100%; /* Full width of the container */
     height: 0%; /* Start with 0 height */
     background-color: var(--chart-color);
-    transition: height 0.5s ease, background-color 0.3s ease; /* Smooth growth transition */
 }
 
 .oil-future,
