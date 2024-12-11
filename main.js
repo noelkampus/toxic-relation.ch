@@ -1,12 +1,4 @@
-import { barChartDispatcher } from "./barChart.js";
-
-const sankeyDispatcher = d3.dispatch("highlightInvestor", "resetHighlight");
-
-
-// Load external JSON file
-// d3.json("data.json").then((data) => {
-//     console.log(data);
-//   });
+// Data
 
 const data = {
     nodes: [
