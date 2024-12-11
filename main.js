@@ -18,8 +18,8 @@ const data = {
         { id: "Vontobel" },
 
         // Company Nodes
-        { id: "Exxon Mobil Corporation" },
         { id: "Chevron Corporation" },
+        { id: "Exxon Mobil Corporation" },
         { id: "Partners Group Holding AG" },
         { id: "Shell plc" },
         { id: "TotalEnergies SE" },
@@ -205,12 +205,12 @@ const height = document.getElementById("container").getBoundingClientRect().heig
 const colorChartMain = '#000000';
 let colorOpacity = 0.9;
 const colorChartHighlight = '#FF0600';
-// let colorOpacityHighlight = 0.9;
 
 const sankey = d3.sankey()
     .nodeId(d => d.id)
     .nodeWidth(0)
     .nodePadding(2)
+    // .nodeSort((a, b) => d3.descending(a.value, b.value))
     .extent([[1, 1], [width, height]]);
 
 const { nodes, links } = sankey({
@@ -298,7 +298,6 @@ node.append("rect")
     document.querySelectorAll(".bar-chart__child").forEach(div => {
         div.addEventListener("mouseover", function () {
             const investorId = this.dataset.investor; // Get investor ID
-            highlightInvestorLinks(investorId);
             calculateAndSetInvestment(investorId); // Calculate and set CSS variables
             updateSectorInvestmentFuture(investorId);
         });
@@ -821,13 +820,14 @@ function getContrastingColor(backgroundColor) {
     return luminance > 0.5 ? "#000" : "#fff";
 }
 
-// Add text for company nodes
+// // Add text for company nodes
 const companyLabels = node
     .filter(d => d.depth > 0) // Filter to company nodes only
     .append("text")
     .attr("text-anchor", "end") // Align text to the right
     .attr("font-family", "ABCFavorit") // Use custom font
     .attr("font-size", "10px") // Adjust font size
+    .attr("text-tranform", "uppercase") // Uppercase text
     .attr("fill", d => {
         // Get computed background color of the parent container
         const backgroundColor = window.getComputedStyle(document.body).backgroundColor || "#fff";
@@ -844,6 +844,7 @@ const investmentValues = node
     .attr("text-anchor", "end") // Align text to the right
     .attr("font-family", "ABCFavorit") // Use custom font
     .attr("font-size", "10px") // Adjust font size
+    .attr("text-tranform", "uppercase") // Uppercase text
     .attr("fill", d => {
         // Get computed background color of the parent container
         const backgroundColor = window.getComputedStyle(document.body).backgroundColor || "#fff";

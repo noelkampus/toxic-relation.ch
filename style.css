@@ -99,7 +99,7 @@ body {
 .column-section {
     position: relative;
     display: grid;
-    grid-template-rows: 16% 74% 10%;
+    grid-template-rows: 16% auto 10%;
     height: 100%;
 
     padding: 1rem 0 1.25rem 0;
@@ -109,7 +109,7 @@ body {
 }
 
 .first-column {
-    width: 15%;
+    width: 20%;
 }
 
 .second-column {
@@ -121,7 +121,7 @@ body {
 }
 
 .fourth-column {
-    width: 15%;
+    width: 20%;
 }
 
 /* Top Section*/
@@ -255,7 +255,7 @@ body {
 .bar-chart__wrapper {
     display: flex;
     flex-direction: column;
-    row-gap: 2px;
+    row-gap: 0;
 
     align-items: flex-end;
 }
@@ -266,6 +266,8 @@ body {
     row-gap: 0.25rem;
     justify-items: top;
     align-items: flex-end;
+
+    border-bottom: 2px solid var(--background-color);
 
     background-color: rgba(000, 000, 000, 0.9);
 }
